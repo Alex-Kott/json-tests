@@ -1,4 +1,5 @@
 <?php
+/*
 header('Content-Type: text/html; charset=utf-8');
 
 $dir ='/SRC/Test_folder';
@@ -10,13 +11,27 @@ do {
     
 }   while ($x++<$z);
     
- 
+ //*/
  
  ?>
 
+<?php
+$files = scandir("tests");
+var_dump($files);
+unset($files[0]);
+unset($files[1]);
+foreach($files as $file){
+	$testNumber = (int) pathinfo($file, PATHINFO_FILENAME);
+	echo "<a href='test.php?test=$testNumber'><h4>Тест номер $testNumber</h4></a>";
+}
 
 
 
+
+?>
+
+
+<!--
 
 <?php 
   isset($_GET['name']) ;
@@ -26,7 +41,7 @@ echo '<br>';
 Для перехода к тесту <br> Введите Ваше имя   : <input type="text" name="name"> 
 <br/> 
 <input type="submit" value="OK"> 
-
+-->
 <!-- тест работы кнопки
 <form enctype="multipart/form-data" action="test.php" method="POST">
  <input type="submit" value="КНОПКА" />

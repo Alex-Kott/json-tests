@@ -23,23 +23,38 @@
 </form>
 
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
-   if($_FILES["filename"]["size"] > 1024*3*1024)
-   {
-     echo ("Размер файла превышает три мегабайта");
-     exit;
-   }
-   // Проверяем загружен ли файл
-   if(is_uploaded_file($_FILES["filename"]["tmp_name"]))
-   {
-     // Если файл загружен успешно, перемещаем егоC:\\\
-     // из временной директории в конечную
-     move_uploaded_file($_FILES["filename"]["tmp_name"], "xampp\htdocs\uploaded_files".$_FILES["filename"]["name"]);
-	 echo ('загружено');
-   } else {
-      echo("Ошибка загрузки файла");
-   }
-      
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+// Проверяем загружен ли файл
+
+if (!empty($_FILES)) {
+
+  //echo "Last file: ".getLastNumber();
+  // Если файл загружен успешно, перемещаем егоC:\\\
+  // из временной директории в конечную
+
+  //move_uploaded_file($_FILES["filename"]["tmp_name"], "./tests/" . $_FILES["filename"]["name"]);
+  move_uploaded_file($_FILES["userfile"]["tmp_name"], "tests/".(getLastNumber()+1).".json");
+  echo "Загружено";
+  
+}
+
+
+
+function getLastNumber(){
+  $files = scandir("tests");
+  $max = 0;
+  foreach($files as $file){
+    $n = (int) pathinfo($file, PATHINFO_FILENAME);
+    if($max < $n) $max = $n;
+  }
+  echo $max;
+  return $max;
+}
+
+
 ?>
    <form action="list.php" method="GET">
           <input type="submit" value="К списку тестов"><br>

@@ -1,72 +1,102 @@
-<html>
-<form name="form" method="post">
-<div>
-<h2>Какие виды компьютерной графики используют в настоящее время?</h2>
-</div>
-<input type = "checkbox" name = "Q1" value = "1">Растровая
-<br>
-<input type = "checkbox" name = "Q2" value = "2">Векторная
-<br>
-<input type = "checkbox" name = "Q3" value = "3">Фрактальная
-<br>
-<input type = "checkbox" name = "Q4" value = "4">Акварельная
-<br>
-<input type = "checkbox" name = "Q5" value = "5">Трёхмерная
-<br>
-<input type = "checkbox" name = "Q6" value = "6">Маслянная
-<br>
-<input type = "checkbox" name = "Q7" value = "7">Пиксель арт
-<br>
-<hr>
-<input type = "submit" name="submit" value = "Далее">
-</form>
+<style>
 
-    <?php
-error_reporting(E_ALL & ~E_NOTICE);
-
-
-
-    // проверяем нажатие submit
-    if($_POST['submit']); {
-    $a =array("1","2"); // массив правильных ответов
-    $b= array("Q1","Q2","Q3","Q4","Q5","Q6","Q7"); // массив чекбоксов
-    foreach($b as $k => $v){
-        // проверяем отмечен чекбокс и есть ли такое значение в массиве правильных ответов
-        if(isset($_POST[$v]) and in_array($_POST[$v],$a)){
-            $c[]= $v; // добавляем в переменную если ответ правильный
-         
-               }
-
-        }   
-        $count = count ($c); 
-        if ($c == 2); // количество правильных ответов
-       { echo  'количество правильных ответов: ', $count; }
-       
+ul{
+	list-style-type: none;
 }
 
-       // $text = "номер сертификата" ;
-        //$protocol = $_SERVER ['SERVER_PROTOCOL'];
-        //header ('Content-type : image/png') ;
+.task{
+	padding: 7px;
+	margin: 5px;
+	background: rgba(0,0,200,0.2);
+	border: 1px solid #999;
+	border-radius: 10px;
+}
 
-       // create_img ($text);
-       // include "gd.php" ;
-  
-    // заносим результат в базу
-echo '<br>' ;
-echo '<br>' ;
-echo 'Поздравляем!' ;
-echo '<br>' ;
-echo 'Введите ваше имя' ;
-   ?>
-   <form action="/session/SRC/create.php" method="get">
-  <input type="text" name="name" value="" >
-  <input type="submit" value= "Сгенерировать сертфикат" >
+</style>
+
+
+<?php
+
+//______ functions
+
+function cutExt($n){
+	return str_replace(".json", '', $n);
+}
+
+function removePoints($arr){
+	unset($arr[0]);
+	unset($arr[1]);
+	return $arr;
+}
+
+//____ 
+
+if(!isset($_GET['test'])){
+  echo "Вы не указали номер теста";
+  die();
+}
+
+$n = $_GET['test'];
+
+$files = scandir("tests");
+$files = array_map("cutExt", $files);
+$files = removePoints($files);
+
+if(!in_array($n, $files)){
+	echo "Такого файла не найдено";
+	die();
+}
+
+$data = file_get_contents("tests/".$n.".json");
+
+$test = json_decode($data);
+
+
+
+if(isset($_POST['results'])){
+	$results = $_POST['results'];
+	foreach($results as $j => $task){
+		if(array_keys($task) == $test[$j]->answers){
+			echo "<div style='color: green;' >Задание ".($j+1)." выполнено верно.</div>";
+		} else {
+			echo "<div style='color: red;' >Задание ".($j+1)." выполнено неверно.</div>";
+		}
+	}
+}
+
+?>
+
+<form method="POST">
+	<div class="test">
+		<?php
+		foreach($test as $s => $item){
+			//var_dump($item);
+
+		?>
+		<div class="task">
+			<div>
+				<?= $item->question ?>
+			</div>
+			<ul>
+			<?php
+			foreach($item->items as $i => $li):
+			?>
+				<li>
+
+					<input type="checkbox" name="results[<?= $s ?>][<?= $i ?>]">
+					<?=  $li ?>
+				</li>
+			<?php
+			endforeach;
+			?>
+			</ul>
+
+		</div>
+
+		<?php
+		}
+		?>
+	</div>
+	<input type="submit" value="Отправить на проверку">
 </form>
 
-   <a href="/session/index.php">Вернуться в начало</a>
-
-
-
-
-    
-</html>

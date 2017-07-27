@@ -14,11 +14,10 @@
       <div class="caption">Login System </div>
       <div id="icon">&nbsp;</div>
       <div id="result">
-		Hello <?php echo $_SESSION['userName']; ?> ! <br/>
-		<p><a href="logout.php"> To log out click here!</a></p>
-		<p><a href="test.php"> TEST!</a></p>
-		<p><a href="admin.php"> Загрузить новый тест!</a></p>
-		<p><a href="delete.php">Удалить тест (в разработке) !</a></p>
+		Привет, <?php echo $_SESSION['userName']; ?> ! <br/>
+		<p><a href="logout.php"> Выйти</a></p>
+		<p><a href="list.php"> Список тестов</a></p>
+		<p><a href="admin.php"> Загрузить новый тест</a></p>
 	  </div>	
 	      </div>
 </body>   

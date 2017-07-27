@@ -1,24 +1,18 @@
-<style>
 
-ul{
-	list-style-type: none;
-}
-
-.task{
-	padding: 7px;
-	margin: 5px;
-	background: rgba(0,0,200,0.2);
-	border: 1px solid #999;
-	border-radius: 10px;
-}
-
-</style>
 
 
 <?php
 
-//______ functions
 
+if(!isset($_GET['test'])){
+	header('Location: 404.php');
+}
+?>
+
+
+<a href="/index.php"><h3>На главную</h3></a>
+
+<?php 
 function cutExt($n){
 	return str_replace(".json", '', $n);
 }
@@ -51,7 +45,7 @@ $data = file_get_contents("tests/".$n.".json");
 
 $test = json_decode($data);
 
-
+	
 
 if(isset($_POST['results'])){
 	$results = $_POST['results'];
@@ -100,3 +94,18 @@ if(isset($_POST['results'])){
 	<input type="submit" value="Отправить на проверку">
 </form>
 
+<style>
+
+ul{
+	list-style-type: none;
+}
+
+.task{
+	padding: 7px;
+	margin: 5px;
+	background: rgba(0,0,200,0.2);
+	border: 1px solid #999;
+	border-radius: 10px;
+}
+
+</style>
